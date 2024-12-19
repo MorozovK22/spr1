@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Water Store</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>Online Water Store</h1>
+            <ul>
+                <li><a href="#promotions">Promotions</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#cart">Cart</a></li>
+                <li><a href="#admin">Admin</a></li>
+                <li><a href="#auth">Login/Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="promotions">
+            <h2>Promotional Products</h2>
+            <div id="promo-products">
+                <div class="product">
+                    <h3>Mineral Water Premium</h3>
+                    <p>Price: $1.50</p>
+                    <button onclick="addToCart('Mineral Water Premium', 1.50)">Add to Cart</button>
+                </div>
+                <div class="product">
+                    <h3>Sparkling Water 1L</h3>
+                    <p>Price: $2.00</p>
+                    <button onclick="addToCart('Sparkling Water 1L', 2.00)">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="categories">
+            <h2>Product Categories</h2>
+            <ul>
+                <li><a href="#">Mineral Water</a></li>
+                <li><a href="#">Sparkling Water</a></li>
+                <li><a href="#">Flavored Water</a></li>
+            </ul>
+        </section>
+
+        <section id="search">
+            <h2>Search Products</h2>
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Search by name or category">
+                <button type="submit">Search</button>
+            </form>
+            <div id="search-results">
+            </div>
+        </section>
+
+        <section id="product-details">
+            <h2>Product Information</h2>
+            <div id="product-info">
+            </div>
+        </section>
+
+        <section id="cart">
+            <h2>Your Cart</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    
+                </tbody>
+            </table>
+            <div id="cart-summary">
+                <p>Total: $<span id="cart-total">0.00</span></p>
+                <button id="checkout-button">Checkout</button>
+            </div>
+        </section>
+
+        <section id="checkout">
+            <h2>Checkout</h2>
+            <form id="checkout-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" required>
+
+                <label for="delivery">Delivery Method:</label>
+                <select id="delivery" required>
+                    <option value="standard">Standard</option>
+                    <option value="express">Express</option>
+                </select>
+
+                <label for="payment">Payment Method:</label>
+                <select id="payment" required>
+                    <option value="credit-card">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                </select>
+
+                <button type="submit">Place Order</button>
+            </form>
+        </section>
+
+        <section id="admin">
+            <h2>Admin Panel</h2>
+            <div id="admin-controls">
+                <button id="add-product" onclick="openModal('addProductModal')">Add Product</button>
+                <button id="manage-orders" onclick="openModal('manageOrdersModal')">Manage Orders</button>
+                <!-- Admin-specific functionalities -->
+            </div>
+        </section>
+
+        <section id="auth">
+            <h2>Login/Register</h2>
+            <button onclick="openModal('loginModal')">Login</button>
+            <button onclick="openModal('registerModal')">Register</button>
+        </section>
+    </main>
+
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addProductModal')">&times;</span>
+            <h2>Add Product</h2>
+            <form onsubmit="addProduct(event)">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" required>
+
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" required>
+
+                <label for="product-description">Description:</label>
+                <textarea id="product-description" required></textarea>
+
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="manageOrdersModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('manageOrdersModal')">&times;</span>
+            <h2>Manage Orders</h2>
+        </div>
+    </div>
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <label for="modal-username">Username:</label>
+                <input type="text" id="modal-username" required>
+                
+                <label for="modal-password">Password:</label>
+                <input type="password" id="modal-password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Register</h2>
+            <form>
+                <label for="modal-new-username">Username:</label>
+                <input type="text" id="modal-new-username" required>
+                
+                <label for="modal-new-password">Password:</label>
+                <input type="password" id="modal-new-password" required>
+                
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const products = [
+            { name: "Mineral Water", category: "Mineral Water", price: 1.5 },
+            { name: "Sparkling Water", category: "Sparkling Water", price: 2.0 },
+            { name: "Flavored Water - Lemon", category: "Flavored Water", price: 2.5 },
+        ];
+        
+        function addToCart(productName, price) {
+            const cartItems = document.getElementById('cart-items');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+            <td>${productName}</td>
+            <td>1</td>
+            <td>${price.toFixed(2)}</td>
+            <td>${price.toFixed(2)}</td>
+            <td><button onclick="removeItem">Remove</button></td>
+            `;
+            cartItems.appendChild(newRow);
+            updateCartTotal();
+        }
+        
+        function updateCartTotal() {
+            const cartItems = document.querySelectorAll('#cart-items tr');
+            let total = 0;
+            cartItems.forEach(row => {
+                const price = parseFloat(row.cells[3].textContent);
+                total += price;
+            });
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+        }
+        
+        function removeItem(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateCartTotal();
+        }
+        
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const results = products.filter(product => 
+            product.name.toLowerCase().includes(query) || 
+            product.category.toLowerCase().includes(query)
+            );
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = results.map(product => `
+            <div class="product">
+                <h3>${product.name}</h3>
+                <p>Category: ${product.category}</p>
+                <p>Price: $${product.price.toFixed(2)}</p>
+                <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                </div>
+                `).join('');
+            });
+            
+            function openModal(id) {
+                document.getElementById(id).style.display = 'block';
+            }
+            
+            function closeModal(id) {
+                document.getElementById(id).style.display = 'none';
+            }
+            </script>
+</body>
+</html>
